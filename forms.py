@@ -20,7 +20,7 @@ def unique_username(form, field):
 
 
 def unique_email(form, field):
-    if User.select().where(User.username == field.data).exists():
+    if User.select().where(User.email == field.data).exists():
         raise ValidationError('A user with that email address already exists!')
 
 
@@ -71,7 +71,7 @@ class RegisterForm(FlaskForm):
         validators=[
             required(),
             Email(message='Please provide a valid email.'),
-            unique_email()
+            unique_email
         ]
     )
     password = PasswordField(

@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% from "macros.html" import render_field%}
+
+{% block title %} {{super()}} | Register  {% endblock %}
+
+{% block content %}
+<div class="register">
+    <h2>Sign Up For an Account</h2>
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form %}
+            {{ render_field(field) }}
+        {% endfor %}
+        <input type="submit" value="Sign Up!" class="button">
+    </form>
+</div>
+{% endblock %}

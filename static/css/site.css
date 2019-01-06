@@ -58,6 +58,7 @@ footer {
 }
 .button.icon-right {
 	padding-right: 30px;
+	margin-right: 10px;
 	top: -10px;
 }
 .button.icon-left {
@@ -138,13 +139,17 @@ ul li a {
 
 .entry-list,
 .edit-entry,
-.new-entry {
+.new-entry,
+.register,
+.login {
 	max-width: 800px;
 	margin: 0 auto;
 	padding: 70px 0 150px 0;
 }
 .edit-entry h2,
-.new-entry h2 {
+.new-entry h2,
+.register h2,
+.login h2 {
 	margin-bottom: 35px;
 }
 .entry-list article {
@@ -227,13 +232,30 @@ input[type=submit] {
 
 .form-error {
     font-size: 14px;
-    color: #ff1919;
+    color: #C5A14E;
     margin-bottom: 5px;
 }
 
 
+/* ==========================================================================
+   Flash Messages
+   ========================================================================== */
 
-
+.notification {
+    text-align; center;
+    padding: 10px 20px;
+    border-radius: 4px;
+    color: #fff;
+}
+.success {
+    background: #70DA8B;
+    color: #4DA463;
+}
+.error {
+  background: #FFE6B2;
+  color: #C5A14E;
+  margin-bottom: 20px;
+}
 
 
 

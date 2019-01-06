@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% from "macros.html" import render_field %}
+
+{% block title %} {{super()}} | Login {% endblock %}
+
+{% block content %}
+<div class="login">
+    <h2>Sign In To Start Creating Journal Entries</h2>
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form %}
+            {{ render_field(field) }}
+        {% endfor %}
+        <input type="submit" value="Sign In!" class="button">
+    </form>
+</div>
+{% endblock %}

@@ -23,7 +23,7 @@ PORT = 8000
 def user_loader(userId):
 	"""For when the login manager needs to look up a user"""
 	try:
-		return models.User.get().where(models.User.id == userId)
+		return models.User.get(models.User.id == userId)
 	except models.DoesNotExist:
 		return None
 
@@ -53,9 +53,9 @@ def login():
 	form = forms.LoginForm()
 	if form.validate_on_submit():
 		try:
-			user = models.User.get().where(models.User.email == form.email.data)
+			user = models.User.get(models.User.email == form.email.data)
 		except models.DoesNotExist:
-			flash('Incorrect email or password', 'error')
+			flash('Incorrect email or password.', 'error')
 		else:
 			if check_password_hash(user.password, form.password.data):
 				# set up the session with flask login
@@ -63,7 +63,7 @@ def login():
 				flash('You are now signed in!', 'success')
 				return redirect(url_for('index'))
 			else:
-				flash('Incorrect email or password', 'error')
+				flash('Incorrect email or password.', 'error')
 	return render_template('login.html', form=form)
 
 
@@ -82,12 +82,12 @@ def register():
 	return render_template('register.html', form=form)
 
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout')
 @login_required
 def logout():
 	# delete the session cookie
 	logout_user()
-	flash('You are now logged out', 'success')
+	flash('You are now logged out.', 'success')
 	return redirect(url_for('index'))
 
 
@@ -96,11 +96,11 @@ def add_entry():
 	form = forms.NewEntryForm()
 	if form.validate_on_submit():
 		models.JournalEntry.create(
-			title = form.title.data,
-			date = form.date.data,
-			time_spent = form.time_spent.data,
-			what_i_learned = form.what_i_learned.data,
-			resources_to_remember = form.resources_to_remember.data
+			title=form.title.data,
+			date=form.date.data,
+			time_spent=form.time_spent.data,
+			what_i_learned=form.what_i_learned.data,
+			resources_to_remember=form.resources_to_remember.data
 		)
 		flash('New journal entry was added!', 'success')
 		return redirect(url_for('index'))
