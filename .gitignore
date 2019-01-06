@@ -2,3 +2,4 @@ __pycache__
 journal.db
 html_templates/
 .idea/
+config.py
