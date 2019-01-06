@@ -1,6 +1,8 @@
 import datetime
 
 from peewee import *
+from flask_bcrypt import generate_password_hash
+from flask_login import UserMixin
 
 DATABASE = SqliteDatabase('journal.db')
 
@@ -18,7 +20,7 @@ class JournalEntry(BaseModel):
 	resources_to_remember = TextField()
 
 
-class User(BaseModel):
+class User(UserMixin, BaseModel):
 	username = CharField(unique=True)
 	email = CharField(unique=True)
 	password = CharField(max_length=100)
@@ -30,11 +32,11 @@ class User(BaseModel):
 			cls.create(
 				username=username,
 				email=email,
-				password=password
+				password=generate_password_hash(password)
 			)
 		# except any errors from validation
 		except IntegrityError:
-			raise ValueError('User already exists')
+			raise ValueError('Error registering user.')
 
 
 def initialize():

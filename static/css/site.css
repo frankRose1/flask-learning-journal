@@ -225,6 +225,12 @@ input[type=submit] {
 	margin-right: 5px;
 }
 
+.form-error {
+    font-size: 14px;
+    color: #ff1919;
+    margin-bottom: 5px;
+}
+
 
 
 
