@@ -7,16 +7,14 @@ from flask_login import UserMixin
 DATABASE = SqliteDatabase('journal.db')
 
 
-class BaseModel(Model):
-	class Meta:
-		database = DATABASE
-
-
-class User(UserMixin, BaseModel):
+class User(UserMixin, Model):
 	username = CharField(unique=True)
 	email = CharField(unique=True)
 	password = CharField()
 	join_date = DateTimeField(default=datetime.datetime.now)
+
+	class Meta:
+		database = DATABASE
 
 	@classmethod
 	def create_user(cls, username, email, password):
@@ -31,16 +29,20 @@ class User(UserMixin, BaseModel):
 			raise ValueError('Error registering user.')
 
 
-class JournalEntry(BaseModel):
+class JournalEntry(Model):
 	title = CharField()
-	date = DateTimeField(datetime.datetime.now)
+	date = DateField()
 	time_spent = CharField()
 	what_i_learned = TextField()
 	resources_to_remember = TextField()
 	user = ForeignKeyField(
-		rel_model=User,
+		User,
 		related_name='entries'
 	)
+
+	class Meta:
+		database = DATABASE
+		order_by = ('-date',)
 
 
 def initialize():

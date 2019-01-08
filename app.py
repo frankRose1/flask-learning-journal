@@ -1,4 +1,4 @@
-from flask import (Flask, render_template, g, flash, redirect, url_for)
+from flask import (Flask, render_template, g, flash, redirect, url_for, abort)
 from flask_login import (login_user, logout_user, login_required,
 						 current_user, LoginManager)
 from flask_bcrypt import check_password_hash
@@ -20,10 +20,10 @@ PORT = 8000
 
 
 @login_manager.user_loader
-def user_loader(userId):
+def user_loader(user_id):
 	"""For when the login manager needs to look up a user"""
 	try:
-		return models.User.get(models.User.id == userId)
+		return models.User.get(models.User.id == user_id)
 	except models.DoesNotExist:
 		return None
 
@@ -46,9 +46,9 @@ def after_request(request):
 @app.route('/')
 @app.route('/entries')
 def index():
-	"""if a user is logged in get the users entries else prompt a log in"""
-	if current_user.is_authenicated:
-		entries = current_user.entries
+	"""if a user is logged in get the users entries else show the landing page"""
+	if g.user.is_authenticated:
+		entries = g.user.entries
 		return render_template('index.html', entries=entries)
 	else:
 		return render_template('landing.html')
@@ -98,6 +98,7 @@ def logout():
 
 
 @app.route('/entry', methods=['GET', 'POST'])
+@login_required
 def add_entry():
 	form = forms.NewEntryForm()
 	if form.validate_on_submit():
@@ -106,16 +107,29 @@ def add_entry():
 			date=form.date.data,
 			time_spent=form.time_spent.data,
 			what_i_learned=form.what_i_learned.data,
-			resources_to_remember=form.resources_to_remember.data
+			resources_to_remember=form.resources_to_remember.data,
+			user=g.user._get_current_object()
 		)
 		flash('New journal entry was added!', 'success')
-		return redirect(url_for('index'))
+		return redirect(url_for('index')), 201
 	return render_template('new.html', form=form)
 
 
-@app.route('/edit')
-def edit_entry():
+@app.route('/entries/<int:entry_id>')
+def journal_entry(entry_id):
+	"""Renders an individual entry or a 404"""
+	try:
+		entry = models.JournalEntry.get(models.JournalEntry.id == entry_id)
+	except models.DoesNotExist:
+		abort(404)
+	else:
+		return render_template('detail.html', entry=entry)
+
+
+@app.route('/entries/edit/<int:entry_id>')
+def edit_entry(entry_id):
 	return render_template('edit.html')
+
 
 @app.errorhandler(404)
 def not_found(error):

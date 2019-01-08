@@ -1,17 +1,9 @@
-from datetime import datetime
-
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, DateField, TextAreaField, PasswordField
+from wtforms.fields import StringField, TextAreaField, PasswordField
+from wtforms.fields.html5 import DateField
 from wtforms.validators import Regexp, required, ValidationError, length, Email, EqualTo
 
 from models import User
-
-
-def check_date_format(form, field):
-    try:
-        datetime.strptime(field.data, '%d/%m/%Y')
-    except ValueError:
-        raise ValidationError('Please use DD/MM/YYYY format')
 
 
 def unique_username(form, field):
@@ -31,11 +23,11 @@ class NewEntryForm(FlaskForm):
             required(),
         ])
     date = DateField(
-        'Date DD/MM/YYYY',
+        'Date',
         validators=[
-            required(),
-            check_date_format
-        ]
+            required()
+        ],
+        format='%Y-%m-%d'
     )
     time_spent = StringField(
         'Time Spent',

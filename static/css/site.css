@@ -141,7 +141,9 @@ ul li a {
 .edit-entry,
 .new-entry,
 .register,
-.login {
+.login,
+.not-found-error,
+.landing-page{
 	max-width: 800px;
 	margin: 0 auto;
 	padding: 70px 0 150px 0;
@@ -230,12 +232,6 @@ input[type=submit] {
 	margin-right: 5px;
 }
 
-.form-error {
-    font-size: 14px;
-    color: #C5A14E;
-    margin-bottom: 5px;
-}
-
 
 /* ==========================================================================
    Flash Messages
@@ -257,8 +253,11 @@ input[type=submit] {
   margin-bottom: 20px;
 }
 
-
-
+.form-error {
+    font-size: 14px;
+    color: #C5A14E;
+    margin-bottom: 5px;
+}
 
 
 
