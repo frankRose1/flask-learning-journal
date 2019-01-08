@@ -44,8 +44,14 @@ def after_request(request):
 
 
 @app.route('/')
+@app.route('/entries')
 def index():
-	return render_template('index.html')
+	"""if a user is logged in get the users entries else prompt a log in"""
+	if current_user.is_authenicated:
+		entries = current_user.entries
+		return render_template('index.html', entries=entries)
+	else:
+		return render_template('landing.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -91,7 +97,7 @@ def logout():
 	return redirect(url_for('index'))
 
 
-@app.route('/entry/add', methods=['GET', 'POST'])
+@app.route('/entry', methods=['GET', 'POST'])
 def add_entry():
 	form = forms.NewEntryForm()
 	if form.validate_on_submit():
@@ -110,6 +116,10 @@ def add_entry():
 @app.route('/edit')
 def edit_entry():
 	return render_template('edit.html')
+
+@app.errorhandler(404)
+def not_found(error):
+	return render_template('404.html'), 404
 
 
 if __name__ == '__main__':

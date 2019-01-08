@@ -12,18 +12,10 @@ class BaseModel(Model):
 		database = DATABASE
 
 
-class JournalEntry(BaseModel):
-	title = CharField()
-	date = DateTimeField(datetime.datetime.now)
-	time_spent = CharField()
-	what_i_learned = TextField()
-	resources_to_remember = TextField()
-
-
 class User(UserMixin, BaseModel):
 	username = CharField(unique=True)
 	email = CharField(unique=True)
-	password = CharField(max_length=100)
+	password = CharField()
 	join_date = DateTimeField(default=datetime.datetime.now)
 
 	@classmethod
@@ -39,8 +31,20 @@ class User(UserMixin, BaseModel):
 			raise ValueError('Error registering user.')
 
 
+class JournalEntry(BaseModel):
+	title = CharField()
+	date = DateTimeField(datetime.datetime.now)
+	time_spent = CharField()
+	what_i_learned = TextField()
+	resources_to_remember = TextField()
+	user = ForeignKeyField(
+		rel_model=User,
+		related_name='entries'
+	)
+
+
 def initialize():
 	"""Ensures tables are created when app is started"""
 	DATABASE.connect()
-	DATABASE.create_tables([JournalEntry, User], safe=True)
+	DATABASE.create_tables([User, JournalEntry], safe=True)
 	DATABASE.close()
