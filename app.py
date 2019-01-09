@@ -43,8 +43,8 @@ def after_request(request):
 	return request
 
 
-@app.route('/')
 @app.route('/entries')
+@app.route('/')
 def index():
 	"""if a user is logged in get the users entries else show the landing page"""
 	if g.user.is_authenticated:
@@ -100,7 +100,7 @@ def logout():
 @app.route('/entry', methods=['GET', 'POST'])
 @login_required
 def add_entry():
-	form = forms.NewEntryForm()
+	form = forms.JournalEntryForm()
 	if form.validate_on_submit():
 		models.JournalEntry.create(
 			title=form.title.data,
@@ -126,7 +126,7 @@ def journal_entry(entry_id):
 		return render_template('detail.html', entry=entry)
 
 
-@app.route('/entries/edit/<int:entry_id>')
+@app.route('/entries/edit/<int:entry_id>', methods=['GET', 'POST'])
 @login_required
 def edit_entry(entry_id):
 	try:
@@ -134,13 +134,24 @@ def edit_entry(entry_id):
 	except models.DoesNotExist:
 		abort(404)
 	else:
-		form = forms.NewEntryForm()
-		context = {'form': form, 'entry': entry}
+		form_data = {
+			'title': entry.title,
+			'date': entry.date,
+			'time_spent': entry.time_spent,
+			'what_i_learned': entry.what_i_learned,
+			'resources_to_remember': entry.resources_to_remember
+		}
+		form = forms.JournalEntryForm(data=form_data)
 		if form.validate_on_submit():
-			entry.update
-			flash('Entry has been updated!')
-			return render_template(url_for('journal_entry', entry_id=entry.id))
-		return render_template('edit.html', context)
+			entry.title = form.title.data
+			entry.date = form.date.data
+			entry.time_spent = form.time_spent.data
+			entry.what_i_learned = form.what_i_learned.data
+			entry.resources_to_remember = form.resources_to_remember.data
+			entry.save()
+			flash('Entry has been updated!', 'success')
+			return redirect(url_for('journal_entry', entry_id=entry.id))
+		return render_template('edit.html', form=form)
 
 
 @app.route('/entries/delete/<int:entry_id>')
@@ -152,7 +163,7 @@ def delete_entry(entry_id):
 		abort(404)
 	else:
 		entry.delete_instance()
-		flash('Successfully deleted your journal entry.')
+		flash('Successfully deleted your journal entry.', 'success')
 		return redirect(url_for('index'))
 
 

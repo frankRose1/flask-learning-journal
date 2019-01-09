@@ -3,11 +3,13 @@
         <!--check for errors-->
         {% if field.errors %}
             {% for error in field.errors %}
-                <div class="notification form-error">*{{ error }}</div>
+                <div class="notification error">*{{ error }}</div>
             {% endfor %}
         {% endif %}
         <!--render the input & label-->
-        {{ field.label }}
+        {% if field.label.text.lower() != 'csrf token' %}
+            {{ field.label }}
+        {% endif %}
         {{ field(placeholder=field.label.text) }}<br>
 
 {% endmacro %}

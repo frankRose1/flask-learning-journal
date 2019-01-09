@@ -193,6 +193,21 @@ ul li a {
 	margin-right: 20px;
 }
 
+.not-found-error,
+.landing-page {
+    text-align: center;
+}
+
+.not-found-error:nth-child(2) {
+    margin-bottom: 20px;
+}
+
+.landing-page-actions {
+    display: flex;
+    margin: 20px auto 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
 
 /* ==========================================================================
@@ -255,12 +270,6 @@ input[type=submit] {
   background: #FFE6B2;
   color: #C5A14E;
   margin-bottom: 20px;
-}
-
-.form-error {
-    font-size: 14px;
-    color: #C5A14E;
-    margin-bottom: 5px;
 }
 
 

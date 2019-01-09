@@ -16,7 +16,7 @@ def unique_email(form, field):
         raise ValidationError('A user with that email address already exists!')
 
 
-class NewEntryForm(FlaskForm):
+class JournalEntryForm(FlaskForm):
     title = StringField(
         'Title',
         validators=[

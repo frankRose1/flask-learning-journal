@@ -3,3 +3,4 @@ journal.db
 html_templates/
 .idea/
 config.py
+.vscode
