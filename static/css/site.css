@@ -178,15 +178,19 @@ ul li a {
 .entry p {
 	margin-bottom: 40px;
 }
-.edit {
+.entry-actions {
 	padding-bottom: 80px;
 	text-align: center;
 	margin: 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 }
-.edit a {
+.entry-actions a {
 	font-weight: 400;
 	text-transform: uppercase;
 	font-size: 18px;
+	margin-right: 20px;
 }
 
 

@@ -111,7 +111,7 @@ def add_entry():
 			user=g.user._get_current_object()
 		)
 		flash('New journal entry was added!', 'success')
-		return redirect(url_for('index')), 201
+		return redirect(url_for('index'))
 	return render_template('new.html', form=form)
 
 
@@ -127,8 +127,33 @@ def journal_entry(entry_id):
 
 
 @app.route('/entries/edit/<int:entry_id>')
+@login_required
 def edit_entry(entry_id):
-	return render_template('edit.html')
+	try:
+		entry = models.JournalEntry.get(models.JournalEntry.id == entry_id)
+	except models.DoesNotExist:
+		abort(404)
+	else:
+		form = forms.NewEntryForm()
+		context = {'form': form, 'entry': entry}
+		if form.validate_on_submit():
+			entry.update
+			flash('Entry has been updated!')
+			return render_template(url_for('journal_entry', entry_id=entry.id))
+		return render_template('edit.html', context)
+
+
+@app.route('/entries/delete/<int:entry_id>')
+@login_required
+def delete_entry(entry_id):
+	try:
+		entry = models.JournalEntry.get(models.JournalEntry.id == entry_id)
+	except models.DoesNotExist:
+		abort(404)
+	else:
+		entry.delete_instance()
+		flash('Successfully deleted your journal entry.')
+		return redirect(url_for('index'))
 
 
 @app.errorhandler(404)
