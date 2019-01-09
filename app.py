@@ -64,7 +64,7 @@ def login():
 			flash('Incorrect email or password.', 'error')
 		else:
 			if check_password_hash(user.password, form.password.data):
-				# set up the session with flask login
+			    # set up the session with flask login
 				login_user(user)
 				flash('You are now signed in!', 'success')
 				return redirect(url_for('index'))
